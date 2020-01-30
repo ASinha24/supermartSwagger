@@ -1,0 +1,137 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: supermart example
+schemes: [http]
+host: supermart.org
+basePath: /api
+consumes: [application/json]
+produces: [application/json]
+paths:
+  /items:
+    post: 
+      tags: [item]
+      operationId: Create
+      parameters:
+      - in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/item'
+      responses:
+        201:
+          description: item Created
+          schema:
+            $ref: '#/definitions/itemResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/APIResponse'
+    get:
+      tags: [item]
+      operationId: List
+      parameters:
+      - in: query
+        name: items
+        type: string
+      responses:
+        200:
+          description: 'item list'
+          schema:
+            type: array
+            items:
+                $ref: '#/definitions/itemResponse'
+  /items/{itemId}:
+    get:
+      tags: [item]
+      operationId: Get
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: item get
+          schema:
+            $ref: '#/definitions/itemResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/APIResponse'
+        404:
+          description: item Not Found
+          schema:
+            $ref: '#/definitions/APIResponse'
+    delete:
+      tags: [item]
+      operationId: delete
+      parameters: 
+      - name: itemId
+        in: path
+        required: true
+        type: string
+      responses:
+        200:
+          description: item deleted
+    put:
+      tags: [item]
+      operationId: put
+      parameters:
+      - name: itemId
+        in: path
+        required: true
+        type: string
+      - name: item
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/item'
+      responses:
+          200:
+            description: 'item updated'
+            schema:
+              $ref: '#/definitions/itemResponse'
+definitions:
+  item:
+    type: object
+    required:
+    - itemname
+    properties:
+      itemname:
+        type: string
+        example: teabag
+      quantity:
+        type: integer
+        format: int64
+        example: 30
+      price:
+        type: integer
+        format: int64
+        example: 50.0
+  itemResponse:
+    type: object
+    properties:
+      itemid:
+        type: string
+      itemname:
+        type: string
+        example: teabag
+      quantity:
+        type: integer
+        example: 50
+      price:
+        type: integer
+        format: float64
+        example: 50.0
+  APIResponse:
+      type: "object"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        type:
+          type: "string"
+        message:
+          type: "string"
+      
